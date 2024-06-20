@@ -28,19 +28,19 @@ def handle():
     logging.info(f'Connected to {addr}')
 
     with conn:
-      data = conn.recv(1e+6) # 1mb
+      data = conn.recv(1024) # 1e+6 = 1mb
       if not data: return
 
       data = data.decode()
 
       logging.info(f'TCP received "{data}"')
       conn.send(data.encode())
-      send(data)
+      send(f'"{data}"')
 
-def send(msg):
-  stdout.buffer.write(struct.pack('I', len(msg)))
-  stdout.write(msg)
-  stdout.flush()
+def send(msg, fd=stdout):
+  fd.buffer.write(struct.pack('I', len(msg)))
+  fd.write(msg)
+  fd.flush()
 
 def read():
   while True:

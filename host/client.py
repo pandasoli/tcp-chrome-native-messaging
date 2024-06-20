@@ -7,15 +7,15 @@ PORT = 65432
 
 server.connect((HOST, PORT))
 
-msg = 'Hello, world'
-print(f'Sending: {msg}')
+with server:
+	msg = 'Hello, World!'
+	msg = msg.encode()
 
-msg = msg.encode()
-server.sendall(msg)
+	print(f'Sending: {msg}')
+	server.sendall(msg)
 
-data = server.recv(1024)
-data = data.decode()
-print(f'Received: {data}')
+	data = server.recv(1024)
+	data = data.decode()
+	print(f'Received: {data}')
 
-server.close()
 print('Connection closed')
