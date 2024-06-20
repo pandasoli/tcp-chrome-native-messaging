@@ -1,0 +1,9 @@
+{
+	"name": "com.elisoli.nekovim.discord",
+	"description": "A simple extension to test Chrome NativeMessaging API",
+	"path": "/home/panda/Dev/nekovim-web-host/host/main",
+	"type": "stdio",
+	"allowed_origins": [
+		"chrome-extension://apkbcblanpaoedhohnkjlhaigcmaoacm/"
+	]
+}

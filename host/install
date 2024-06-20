@@ -1,0 +1,62 @@
+#!/usr/bin/env sh
+
+file='com.elisoli.nekovim.discord.json'
+chrome_unstable_path="$XDG_CONFIG_HOME/google-chrome-unstable/NativeMessagingHosts"
+vivaldi_path="$XDG_CONFIG_HOME/vivaldi/NativeMessagingHosts"
+
+op='install'
+lang='python'
+browser='chrome_unstable'
+
+for (( i = 1; i <= $#; i++ )); do
+	flag=${!i}
+
+	if [ "$flag" = 'uninstall' ]; then
+		op='uninstall'
+	elif [ "$flag" = '--lang' ]; then
+		(( i+=1 ))
+
+		if (($i > $#)); then
+			echo Expected lang name after \`$flag\`
+			exit 1
+		fi
+
+		lang=${!i}
+	elif [ "$flag" = '--browser' ]; then
+		(( i+=1 ))
+
+		if (($i > $#)); then
+			echo Expected lang browser after \`$flag\`
+			exit 1
+		fi
+
+		browser=${!i}
+	else
+		echo Unknown flag \`$flag\`
+		exit 1
+	fi
+done
+
+if [ "$op" = 'uninstall' ]; then
+	rm main
+
+	if   [ "$browser" = 'chrome_unstable' ]; then rm $chrome_unstable_path/$file  # For Google Chrome Unstable
+	elif [ "$browser" = 'vivaldi'         ]; then rm $vivaldi_path/$file # For Vivaldi
+	fi
+else
+	if   [ "$lang" = 'python' ]; then cp main{.py,}
+	elif [ "$lang" = 'lua'    ]; then cp main{.lua,}
+	elif [ "$lang" = 'c'      ]; then gcc -o main{,.c}
+	elif [ "$lang" = 'cpp'    ]; then g++ -o main{,.cpp}
+	else
+		echo Unknown lang
+	fi
+
+	chmod +x main
+
+	if   [ "$browser" = 'chrome_unstable' ]; then cp $file $chrome_unstable_path  # For Google Chrome Unstable
+	elif [ "$browser" = 'vivaldi'         ]; then cp $file $vivaldi_path # For Vivaldi
+	else
+		echo Unknown browser
+	fi
+fi
